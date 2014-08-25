@@ -61,7 +61,7 @@ class Db_Mysqli
     /**
      * Run a query
      *
-     * @param $sql
+     * @param string $sql
      * @return bool|\mysqli_result
      * @throws Db\Exception\Query
      */
@@ -107,7 +107,7 @@ class Db_Mysqli
             Db::FETCH_BOTH => MYSQLI_BOTH,
         );
 
-        $rows = null;
+        $rows = array();
 
         while ($row = $result->fetch_array(empty($columns) ? $mapFetchType[$type] : MYSQLI_ASSOC)) {
 
@@ -126,10 +126,10 @@ class Db_Mysqli
     /**
      * Run a query and fetch all result rows
      *
-     * @param $sql
+     * @param string $sql
      * @param array $columns
      * @param int $type
-     * @return array|null
+     * @return mixed
      */
     public function fetchAll($sql, $columns = null, $type = Db::FETCH_NUM)
     {
@@ -142,7 +142,7 @@ class Db_Mysqli
      * @param string $sql
      * @param array $columns
      * @param int $type
-     * @return array|null
+     * @return mixed
      */
     public function fetchRow($sql, $columns = null, $type = Db::FETCH_NUM)
     {

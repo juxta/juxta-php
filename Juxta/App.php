@@ -465,16 +465,25 @@ class App
      * Users
      *
      * @param int $cid
-     * @return array
+     * @return array|null
      */
     protected function showUsers($cid)
     {
+        $rows = $this->getDb($cid)->fetchAll("SELECT * FROM mysql.user", Db::FETCH_ASSOC);
+
+        if (!$rows || !is_array($rows)) {
+            return;
+        }
+
         $users = null;
 
-        foreach ($this->getDb($cid)->fetchAll("SELECT * FROM mysql.user", Db::FETCH_ASSOC) as $row) {
+        foreach ($rows as $row) {
 
-            $user = array($row['User'], $row['Host'], !empty($row['Password']) ? 'YES' : 'NO',
-                $row['Grant_priv'] === 'Y' ? 'YES' : '');
+            $user = array(
+                $row['User'], $row['Host'],
+                !empty($row['Password']) ? 'YES' : 'NO',
+                $row['Grant_priv'] === 'Y' ? 'YES' : ''
+            );
 
             $privileges = array();
 
@@ -661,11 +670,15 @@ class App
      * @param $cid
      * @param $table
      * @param $database
-     * @return array
+     * @return array|null
      */
     protected function showTable($cid, $table, $database)
     {
         $table = $this->getDb($cid)->fetchAll("SHOW COLUMNS FROM `{$table}` FROM `{$database}`");
+
+        if (!$table || !is_array($table)) {
+            return;
+        }
 
         $columns = array();
 

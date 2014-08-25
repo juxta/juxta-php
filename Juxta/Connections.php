@@ -3,12 +3,12 @@
 class Connections
 {
     /**
-     * @var Juxta_Session
+     * @var Session
      */
     private $session;
 
     /**
-     * @var array
+     * @var Config
      */
     private $config;
 
