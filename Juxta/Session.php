@@ -2,9 +2,6 @@
 
 class Session
 {
-    /**
-     *
-     */
     public function __construct()
     {
         session_start();
@@ -33,6 +30,8 @@ class Session
     /**
      * Delete connection from session
      *
+     * @param int $cid
+     * @return bool
      */
     public function deleteConnection($cid)
     {
@@ -49,7 +48,6 @@ class Session
 
     /**
      * Delete all connections
-     *
      */
     public function deleteConnections()
     {

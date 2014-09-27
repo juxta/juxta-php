@@ -2,21 +2,24 @@
 
 class Db
 {
-
+    /**
+     * @const Extension
+     */
     const EXTENSION_MYSQLI = 'Mysqli';
-
     const EXTENSION_PDO = 'Pdo';
 
+    /**
+     * @const Defaults
+     */
     const DEFAULT_HOST = 'localhost';
-
     const DEFAULT_PORT = 3306;
-
     const DEFAULT_CHARSET = 'utf8';
 
+    /**
+     * @const Fetch style
+     */
     const FETCH_ASSOC = 1;
-
     const FETCH_NUM = 2;
-
     const FETCH_BOTH = 3;
 
     /**
