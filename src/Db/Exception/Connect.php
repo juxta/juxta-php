@@ -1,4 +1,6 @@
-<?php namespace Juxta\Db\Exception;
+<?php
+
+namespace Juxta\Db\Exception;
 
 use Juxta\Exception\Exception;
 

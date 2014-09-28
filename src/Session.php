@@ -1,4 +1,6 @@
-<?php namespace Juxta;
+<?php
+
+namespace Juxta;
 
 class Session
 {

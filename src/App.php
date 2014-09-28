@@ -1,5 +1,8 @@
-<?php namespace Juxta;
+<?php
 
+namespace Juxta;
+
+use Juxta\Db\Db;
 use Juxta\Exception\SessionNotFound;
 use Juxta\Db\Exception\Query;
 use Juxta\Db\Exception\Connect;
@@ -229,8 +232,8 @@ class App
 
     /**
      * @param $cid
-     * @return Db_Mysqli
-     * @throws \Juxta\Exception\SessionNotFound
+     * @return mixed
+     * @throws Exception\SessionNotFound
      */
     protected function getDb($cid)
     {

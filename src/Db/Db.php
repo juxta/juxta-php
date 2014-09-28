@@ -1,4 +1,6 @@
-<?php namespace Juxta;
+<?php
+
+namespace Juxta\Db;
 
 class Db
 {
@@ -102,7 +104,7 @@ class Db
      */
     public static function factory($params, $extension = self::EXTENSION_MYSQLI)
     {
-        $className = 'Juxta\Db_' . ucfirst($extension);
+        $className = 'Juxta\Db\\' . ucfirst($extension);
 
         return new $className($params);
     }

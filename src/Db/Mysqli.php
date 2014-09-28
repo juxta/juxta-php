@@ -1,9 +1,11 @@
-<?php namespace Juxta;
+<?php
+
+namespace Juxta\Db;
 
 use Juxta\Db\Exception\Connect;
 use Juxta\Db\Exception\Query;
 
-class Db_Mysqli
+class Mysqli implements DbInterface
 {
     /**
      * @var \mysqli
@@ -12,7 +14,7 @@ class Db_Mysqli
 
     /**
      * @param array $params
-     * @throws \Juxta\Db\Exception\Connect
+     * @throws Connect
      */
     public function __construct(array $params)
     {
@@ -63,7 +65,7 @@ class Db_Mysqli
      *
      * @param string $sql
      * @return bool|\mysqli_result
-     * @throws Db\Exception\Query
+     * @throws Query
      */
     public function query($sql)
     {

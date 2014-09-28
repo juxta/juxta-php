@@ -1,4 +1,8 @@
-<?php namespace Juxta;
+<?php
+
+namespace Juxta;
+
+use Juxta\Db\Db;
 
 class Connections
 {
@@ -81,7 +85,6 @@ class Connections
         }
 
         $connections = array_merge($stored, $established);
-
 
         ksort($connections);
 
