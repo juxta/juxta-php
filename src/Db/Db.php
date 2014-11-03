@@ -59,43 +59,6 @@ class Db
     );
 
     /**
-     * Prepare connection params from array
-     *
-     * @param $params
-     * @return array
-     */
-    public static function connectionFromArray($params)
-    {
-        $connection = array_intersect_key($params, array_flip(array('host', 'port', 'user', 'password', 'charset')));
-
-        if (array_key_exists('host', $connection)) {
-            $connection['host'] = trim($connection['host']);
-        }
-
-        if (empty($connection['host'])) {
-            $connection['host'] = self::DEFAULT_HOST;
-        }
-
-        if (array_key_exists('port', $connection)) {
-            $connection['port'] = (int)$connection['port'];
-        }
-
-        if (empty($connection['charset'])) {
-            $connection['charset'] = self::DEFAULT_CHARSET;
-        }
-
-        if (empty($connection['user'])) {
-            unset($connection['user']);
-        }
-
-        if (empty($connection['password'])) {
-            unset($connection['password']);
-        }
-
-        return $connection;
-    }
-
-    /**
      * Create database object
      *
      * @param $params

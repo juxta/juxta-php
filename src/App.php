@@ -3,9 +3,10 @@
 namespace Juxta;
 
 use Juxta\Db\Db;
-use Juxta\Exception\SessionNotFound;
 use Juxta\Db\Exception\Query;
 use Juxta\Db\Exception\Connect;
+use Juxta\Db\Connection;
+use Juxta\Exception\SessionNotFound;
 
 class App
 {
@@ -41,7 +42,7 @@ class App
 
             if (isset($_GET['login'])) {
 
-                $response = $this->connect(Db::connectionFromArray($_POST));
+                $response = $this->connect(Connection::extract($_POST));
 
             } elseif (isset($_GET['logout'])) {
 
@@ -255,7 +256,7 @@ class App
     protected function connect(array $connection)
     {
         if (empty($connection['password'])) {
-            $stored = $this->connections->getByKey(Connections::key($connection));
+            $stored = $this->connections->getByKey(Connection::key($connection));
         }
 
         if (!empty($stored) && array_key_exists('password', $stored)) {
@@ -279,7 +280,7 @@ class App
 
         $connection = $this->connections->save($connection);
 
-        return Connections::maskPassword($connection);
+        return Connection::maskPassword($connection);
     }
 
     /**

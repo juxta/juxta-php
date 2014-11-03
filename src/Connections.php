@@ -2,7 +2,7 @@
 
 namespace Juxta;
 
-use Juxta\Db\Db;
+use Juxta\Db\Connection;
 
 class Connections
 {
@@ -27,45 +27,6 @@ class Connections
     }
 
     /**
-     * Compose connection key
-     *
-     * @param array $connection
-     * @return string
-     */
-    public static function key(array $connection)
-    {
-        $key = isset($connection['user']) ? $connection['user'] : '';
-
-        $key .= '@';
-
-        $key .= isset($connection['host']) ? $connection['host'] : Db::DEFAULT_HOST;
-
-        $key .= ':';
-
-        $key .= isset($connection['port']) ? $connection['port'] : Db::DEFAULT_PORT;
-
-        return $key;
-    }
-
-    /**
-     * @param array $connection
-     * @return array
-     */
-    public static function maskPassword(array $connection)
-    {
-        if (isset($connection['password'])) {
-            if (isset($connection['cid'])) {
-                unset($connection['password']);
-
-            } else {
-                $connection['password'] = true;
-            }
-        }
-
-        return $connection;
-    }
-
-    /**
      * @param bool $mask
      * @return array|null
      */
@@ -76,12 +37,12 @@ class Connections
 
         if (!empty($this->config['connections'])) {
             foreach ($this->config['connections'] as $connection) {
-                $stored[self::key($connection)] = $connection;
+                $stored[Connection::key($connection)] = $connection;
             }
         }
 
         foreach ((array)$this->session->getConnections() as $connection) {
-            $established[self::key($connection)] = $connection;
+            $established[Connection::key($connection)] = $connection;
         }
 
         $connections = array_merge($stored, $established);
@@ -89,7 +50,7 @@ class Connections
         ksort($connections);
 
         if ($mask) {
-            $connections = array_map(array($this, 'maskPassword'), $connections);
+            $connections = array_map(array('Juxta\Db\Connection', 'maskPassword'), $connections);
         }
 
         return !empty($connections) ? $connections : null;
