@@ -2,7 +2,7 @@
 
 namespace Juxta;
 
-class Session
+final class Session
 {
     public function __construct()
     {
@@ -54,5 +54,7 @@ class Session
     public function deleteConnections()
     {
         unset($_SESSION['connections']);
+
+        return true;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Juxta;
 
-class Config implements \ArrayAccess
+final class Config implements \ArrayAccess
 {
     /**
      * @var array
