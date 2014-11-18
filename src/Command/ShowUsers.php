@@ -11,44 +11,38 @@ class ShowUsers extends CommandAbstract
     {
         $rows = $this->db->fetchAll("SELECT * FROM mysql.user", Db::FETCH_ASSOC);
 
-        if (!$rows || !is_array($rows)) {
-            return;
+        return array_map([$this, 'prepareRow'], (array)$rows);
+    }
+
+    protected static function prepareRow($row)
+    {
+        return [
+            $row['User'],
+            $row['Host'],
+            !empty($row['Password']) ? 'YES' : 'NO',
+            $row['Grant_priv'] === 'Y' ? 'YES' : '',
+            self::collectPrivileges($row)
+        ];
+    }
+
+    protected static function collectPrivileges($row)
+    {
+        $privileges = [];
+
+        foreach (Db::$privileges as $privilege => $title) {
+            if (isset($row[$privilege]) && $row[$privilege] === 'Y') {
+                $privileges[] = $title;
+            }
         }
 
-        $users = null;
-
-        foreach ($rows as $row) {
-
-            $user = [
-                $row['User'], $row['Host'],
-                !empty($row['Password']) ? 'YES' : 'NO',
-                $row['Grant_priv'] === 'Y' ? 'YES' : ''
-            ];
-
-            $privileges = [];
-
-            foreach (Db::$privileges as $privilege => $title) {
-                if (isset($row[$privilege]) && $row[$privilege] === 'Y') {
-                    $privileges[] = $title;
-                }
-            }
-
-            if (count($privileges) === 0) {
-                $privileges = 'USAGE';
-
-            } else if (count($privileges) === count(Db::$privileges)) {
-                $privileges = 'ALL';
-
-            } else {
-                $privileges = implode(', ', $privileges);
-            }
-
-            $user[] = $privileges;
-
-            $users[] = $user;
-
+        if (count($privileges) === 0) {
+            return 'USAGE';
         }
 
-        return $users;
+        if (count($privileges) === count(Db::$privileges)) {
+            return  'ALL';
+        }
+
+        return  implode(', ', $privileges);
     }
 }
