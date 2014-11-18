@@ -6,8 +6,14 @@ use Juxta\Db\DbInterface;
 
 abstract class CommandAbstract implements CommandInterface
 {
-    protected $_db;
+    /**
+     * @var DbInterface
+     */
+    protected $db;
 
+    /**
+     * @param DbInterface $db
+     */
     public function __construct(DbInterface $db)
     {
         $this->db = $db;

@@ -69,8 +69,6 @@ class Mysqli implements DbInterface
      */
     public function query($sql)
     {
-        //$sql = $this->connection->escape_string($sql);
-
         $result = $this->connection->query($sql);
 
         if ($this->connection->error) {

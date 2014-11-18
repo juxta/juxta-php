@@ -50,6 +50,8 @@ final class Session
 
     /**
      * Delete all connections
+     *
+     * @return bool
      */
     public function deleteConnections()
     {

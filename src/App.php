@@ -197,7 +197,7 @@ final class App
             return "{$e->getCode()} {$e->getMessage()}";
         }
 
-        $version = $db->fetchAll("SHOW VARIABLES LIKE '%version%'", DB::FETCH_ASSOC);
+        $version = $db->fetchAll("SHOW VARIABLES LIKE '%version%'", Db::FETCH_ASSOC);
 
         foreach ($version as $row) {
             if (in_array($row['Variable_name'], array('version', 'version_comment'))) {

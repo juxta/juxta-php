@@ -4,7 +4,7 @@ namespace Juxta;
 
 use Juxta\Db\Connection;
 
-class Connections
+final class Connections
 {
     /**
      * @var Session
@@ -113,7 +113,7 @@ class Connections
     }
 
     /**
-     *
+     * @return bool
      */
     public function deleteAll()
     {
