@@ -2,7 +2,7 @@
 
 namespace Juxta\Command;
 
-use Juxta\Db\Exception\Query;
+use Juxta\Db\Exception\QueryErrorException;
 use Juxta\Request;
 
 class DropViews extends CommandAbstract
@@ -16,7 +16,7 @@ class DropViews extends CommandAbstract
                 $this->db->query("DROP VIEW `{$request['from']}`.`{$view}`;");
                 $dropped[] = $view;
 
-            } catch (Query $exception) {
+            } catch (QueryErrorException $exception) {
                 $exception->attach(['dropped' => $dropped, 'from' => $request['from']]);
                 throw $exception;
             }

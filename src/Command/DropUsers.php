@@ -2,7 +2,7 @@
 
 namespace Juxta\Command;
 
-use Juxta\Db\Exception\Query;
+use Juxta\Db\Exception\QueryErrorException;
 use Juxta\Request;
 
 class DropUsers extends CommandAbstract
@@ -16,7 +16,7 @@ class DropUsers extends CommandAbstract
                 $this->db->query("DROP USER {$user}");
                 $dropped[] = $user;
 
-            } catch (Query $exception) {
+            } catch (QueryErrorException $exception) {
                 $exception->attach(['dropped' => $dropped]);
                 throw $exception;
             }

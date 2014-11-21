@@ -3,9 +3,9 @@
 namespace Juxta;
 
 use Juxta\Exception\Exception;
-use Juxta\Exception\SessionNotFound;
+use Juxta\Exception\SessionNotFoundException;
 use Juxta\Db\Db;
-use Juxta\Db\Exception\Connect;
+use Juxta\Db\Exception\ConnectErrorException;
 use Juxta\Db\Connection;
 
 final class App
@@ -75,7 +75,7 @@ final class App
     }
 
     /**
-     * @throws SessionNotFound
+     * @throws SessionNotFoundException
      * @return string
      */
     public function run()
@@ -90,7 +90,7 @@ final class App
             $connection = $this->connections->getByCid($cid);
 
             if (empty($connection)) {
-                throw new SessionNotFound();
+                throw new SessionNotFoundException();
             }
 
             $name = 'Juxta\\Command\\' . $name;
@@ -123,7 +123,7 @@ final class App
                 $response = $this->connections->getByCid($cid, true);
 
                 if (empty($response)) {
-                    throw new SessionNotFound();
+                    throw new SessionNotFoundException();
                 }
 
             } elseif (isset($_GET['get']) && $_GET['get'] === 'connections') {
@@ -131,21 +131,21 @@ final class App
                 $response = $this->connections->getAll();
             }
 
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
 
             $status = [
-                'Juxta\Exception\SessionNotFound' => "session_not_found",
-                'Juxta\Db\Exception\Connect' => "connection_error",
-                'Juxta\Db\Exception\Query' => "query_error",
+                'Juxta\Exception\SessionNotFoundException' => "session_not_found",
+                'Juxta\Db\Exception\ConnectErrorException' => "connection_error",
+                'Juxta\Db\Exception\QueryErrorException' => "query_error",
             ];
 
             $response = [
-                'error' => isset($status[get_class($e)]) ? $status[get_class($e)] : 'error',
-                'errormsg' => $e->getMessage(),
-                'errorno' => $e->getCode()
+                'error' => isset($status[get_class($exception)]) ? $status[get_class($exception)] : 'error',
+                'errormsg' => $exception->getMessage(),
+                'errorno' => $exception->getCode()
             ];
 
-            $response += (array)$e->getAttachment();
+            $response += (array)$exception->getAttachment();
         }
 
         return json_encode($response);
@@ -193,8 +193,8 @@ final class App
         try {
             $db = Db::factory($connection);
 
-        } catch (Connect $e) {
-            return "{$e->getCode()} {$e->getMessage()}";
+        } catch (ConnectErrorException $exception) {
+            return "{$exception->getCode()} {$exception->getMessage()}";
         }
 
         $version = $db->fetchAll("SHOW VARIABLES LIKE '%version%'", Db::FETCH_ASSOC);

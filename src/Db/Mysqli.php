@@ -2,8 +2,8 @@
 
 namespace Juxta\Db;
 
-use Juxta\Db\Exception\Connect;
-use Juxta\Db\Exception\Query;
+use Juxta\Db\Exception\ConnectErrorException;
+use Juxta\Db\Exception\QueryErrorException;
 
 class Mysqli implements DbInterface
 {
@@ -14,18 +14,18 @@ class Mysqli implements DbInterface
 
     /**
      * @param array $params
-     * @throws Connect
+     * @throws ConnectErrorException
      */
     public function __construct(array $params)
     {
         if (!function_exists('mysqli_connect')) {
-            throw new Connect('The mysqli extension is not enabled');
+            throw new ConnectErrorException('The mysqli extension is not enabled');
         }
 
         $this->connection = @new \mysqli($params['host'], $params['user'], $params['password'], '', $params['port']);
 
         if ($this->connection->connect_error) {
-            throw new Connect($this->connection->connect_error, $this->connection->connect_errno);
+            throw new ConnectErrorException($this->connection->connect_error, $this->connection->connect_errno);
         }
     }
 
@@ -65,14 +65,14 @@ class Mysqli implements DbInterface
      *
      * @param string $sql
      * @return bool|\mysqli_result
-     * @throws Query
+     * @throws QueryErrorException
      */
     public function query($sql)
     {
         $result = $this->connection->query($sql);
 
         if ($this->connection->error) {
-            throw new Query($this->connection->error, $this->connection->errno);
+            throw new QueryErrorException($this->connection->error, $this->connection->errno);
         }
 
         return $result;

@@ -1,25 +1,16 @@
-<?php namespace Juxta\Exception;
+<?php
 
-class Exception extends \Exception
+namespace Juxta\Exception;
+
+interface Exception
 {
     /**
-     * @var mixed
+     * @param mixed
      */
-    protected $attachment;
+    public function attach($object);
 
     /**
-     * @param $object
+     * @return mixed
      */
-    public function attach($object)
-    {
-        $this->attachment = $object;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAttachment()
-    {
-        return $this->attachment;
-    }
+    public function getAttachment();
 }

@@ -2,7 +2,7 @@
 
 namespace Juxta\Command;
 
-use Juxta\Db\Exception\Query;
+use Juxta\Db\Exception\QueryErrorException;
 use Juxta\Request;
 
 class DropDatabases extends CommandAbstract
@@ -16,7 +16,7 @@ class DropDatabases extends CommandAbstract
                 $this->db->query("DROP DATABASE `{$database}`");
                 $dropped[] = $database;
 
-            } catch (Query $exception) {
+            } catch (QueryErrorException $exception) {
 
                 if (!empty($dropped)) {
                     $exception->attach(['dropped' => $dropped]);

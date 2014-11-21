@@ -2,7 +2,7 @@
 
 namespace Juxta\Command;
 
-use Juxta\Db\Exception\Query;
+use Juxta\Db\Exception\QueryErrorException;
 use Juxta\Request;
 
 class DropTriggers extends CommandAbstract
@@ -16,7 +16,7 @@ class DropTriggers extends CommandAbstract
                 $this->db->query("DROP TRIGGER `{$request['from']}`.`{$trigger}`");
                 $dropped[] = $trigger;
 
-            } catch (Query $exception) {
+            } catch (QueryErrorException $exception) {
                 $exception->attach(['dropped' => $dropped]);
                 throw $exception;
             }

@@ -2,7 +2,7 @@
 
 namespace Juxta\Command;
 
-use Juxta\Db\Exception\Query;
+use Juxta\Db\Exception\QueryErrorException;
 use Juxta\Request;
 
 class DropRoutines extends CommandAbstract
@@ -19,7 +19,7 @@ class DropRoutines extends CommandAbstract
                     $this->db->query("DROP FUNCTION `{$database}`.`{$function}`");
                     $dropped['function'][] = $function;
 
-                } catch (Query $e) {
+                } catch (QueryErrorException $e) {
                     $e->attach(array('dropped' => $dropped, 'from' => $database));
                     throw $e;
                 }
@@ -32,7 +32,7 @@ class DropRoutines extends CommandAbstract
                     $this->db->query("DROP PROCEDURE `{$database}`.`{$procedure}`");
                     $dropped['procedure'][] = $procedure;
 
-                } catch (Query $e) {
+                } catch (QueryErrorException $e) {
                     $e->attach(array('dropped' => $dropped, 'from' => $database));
                     throw $e;
                 }
