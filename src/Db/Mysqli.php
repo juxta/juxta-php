@@ -33,7 +33,7 @@ class Mysqli implements DbInterface
      * Prepare a row
      *
      * @param $row
-     * @param null $columns
+     * @param array $columns
      * @param int $type
      * @return array|null
      */
