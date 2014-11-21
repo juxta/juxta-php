@@ -3,6 +3,11 @@
 trait ExceptionAttachTrait
 {
     /**
+     * @var mixed
+     */
+    private $attachment;
+
+    /**
      * {@inheritdoc}
      */
     public function attach($object)
