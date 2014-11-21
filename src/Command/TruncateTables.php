@@ -2,6 +2,7 @@
 
 namespace Juxta\Command;
 
+use Juxta\Db\Exception\QueryErrorException;
 use Juxta\Request;
 
 class TruncateTables extends CommandAbstract
@@ -15,7 +16,7 @@ class TruncateTables extends CommandAbstract
                 $this->db->query("TRUNCATE TABLE `{$request['from']}`.`{$table}`;");
                 $truncated[] = $table;
 
-            } catch (Query $exception) {
+            } catch (QueryErrorException $exception) {
                 $exception->attach(['truncated' => $truncated, 'from' => $request['from']]);
                 throw $exception;
             }
