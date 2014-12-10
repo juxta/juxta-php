@@ -108,7 +108,7 @@ final class App
 
             } elseif (isset($_GET['login'])) {
 
-                $response = $this->connect(Connection::extract($_POST));
+                $response = $this->connect(Db::extract($_POST));
 
             } elseif (isset($_GET['logout'])) {
 
@@ -182,7 +182,7 @@ final class App
     private function connect(array $connection)
     {
         if (empty($connection['password'])) {
-            $stored = $this->connections->getByKey(Connection::key($connection));
+            $stored = $this->connections->getByKey(Db::key($connection));
         }
 
         if (!empty($stored) && array_key_exists('password', $stored)) {
@@ -207,6 +207,6 @@ final class App
 
         $connection = $this->connections->save($connection);
 
-        return Connection::maskPassword($connection);
+        return Db::maskPassword($connection);
     }
 }

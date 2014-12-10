@@ -2,19 +2,19 @@
 
 namespace Juxta\Command;
 
-use Juxta\Db\DbInterface;
+use Juxta\Db\AdapterInterface;
 
 abstract class CommandAbstract implements CommandInterface
 {
     /**
-     * @var DbInterface
+     * @var AdapterInterface
      */
     protected $db;
 
     /**
-     * @param DbInterface $db
+     * @param AdapterInterface $db
      */
-    public function __construct(DbInterface $db)
+    public function __construct(AdapterInterface $db)
     {
         $this->db = $db;
     }

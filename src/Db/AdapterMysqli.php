@@ -2,6 +2,7 @@
 
 namespace Juxta\Db;
 
+use Juxta\Db\Db;
 use Juxta\Db\Exception\ConnectErrorException;
 use Juxta\Db\Exception\QueryErrorException;
 
@@ -32,7 +33,7 @@ class AdapterMysqli implements AdapterInterface
             $this->connection = $arguments[0];
 
         } elseif (is_array($arguments[0])) {
-            $params = Connection::extract($arguments[0]);
+            $params = Db::extract($arguments[0]);
         }
 
         if (!empty($params)) {
@@ -59,11 +60,15 @@ class AdapterMysqli implements AdapterInterface
      * @param array $row
      * @param array $columns
      * @param int $type
-     * @return array|null
+     * @return array
      */
-    protected static function prepare(array $row, $columns = null, $type = Db::FETCH_NUM)
+    protected static function prepare(array $row, array $columns = null, $type = Db::FETCH_NUM)
     {
-        $values = null;
+        if (empty($columns)) {
+            return $row;
+        }
+
+        $values = [];
 
         foreach ($columns as $column) {
             if (!array_key_exists($column, $row)) {
@@ -98,16 +103,16 @@ class AdapterMysqli implements AdapterInterface
 
         if (is_numeric($columns)) {
             $type = $columns;
-            $columns = null;
+            $columns = [];
         }
 
-        $map = array(
+        $map = [
             Db::FETCH_ASSOC => MYSQLI_ASSOC,
             Db::FETCH_NUM => MYSQLI_NUM,
             Db::FETCH_BOTH => MYSQLI_BOTH,
-        );
+        ];
 
-        $rows = array();
+        $rows = [];
 
         while ($row = $result->fetch_array(empty($columns) ? $map[$type] : MYSQLI_ASSOC)) {
 
@@ -139,7 +144,7 @@ class AdapterMysqli implements AdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function fetchRow($sql, array $columns = null, $type = Db::FETCH_NUM)
+    public function fetchRow($sql, $columns = null, $type = Db::FETCH_NUM)
     {
         $result = $this->query($sql);
 
@@ -153,7 +158,7 @@ class AdapterMysqli implements AdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function fetchAll($sql, array $columns = null, $type = Db::FETCH_NUM)
+    public function fetchAll($sql, $columns = null, $type = Db::FETCH_NUM)
     {
         $result = $this->query($sql);
 

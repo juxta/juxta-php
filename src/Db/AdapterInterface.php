@@ -21,7 +21,7 @@ interface AdapterInterface
      * @param int $type
      * @return array
      */
-    public function fetchRow($sql, array $columns = null, $type = Db::FETCH_NUM);
+    public function fetchRow($sql, $columns = null, $type = Db::FETCH_NUM);
 
     /**
      * Run a query and fetch all result rows
@@ -31,5 +31,5 @@ interface AdapterInterface
      * @param int $type
      * @return array
      */
-    public function fetchAll($sql, array $columns = null, $type = Db::FETCH_NUM);
+    public function fetchAll($sql, $columns = null, $type = Db::FETCH_NUM);
 }

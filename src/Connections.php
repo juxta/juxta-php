@@ -3,6 +3,7 @@
 namespace Juxta;
 
 use Juxta\Db\Connection;
+use Juxta\Db\Db;
 
 final class Connections
 {
@@ -37,12 +38,12 @@ final class Connections
 
         if (!empty($this->config['connections'])) {
             foreach ($this->config['connections'] as $connection) {
-                $stored[Connection::key($connection)] = $connection;
+                $stored[Db::key($connection)] = $connection;
             }
         }
 
         foreach ((array)$this->session->getConnections() as $connection) {
-            $established[Connection::key($connection)] = $connection;
+            $established[Db::key($connection)] = $connection;
         }
 
         $connections = array_merge($stored, $established);
@@ -50,7 +51,7 @@ final class Connections
         ksort($connections);
 
         if ($mask) {
-            $connections = array_map(array('Juxta\Db\Connection', 'maskPassword'), $connections);
+            $connections = array_map(array('Juxta\Db\Db', 'maskPassword'), $connections);
         }
 
         return !empty($connections) ? $connections : null;
