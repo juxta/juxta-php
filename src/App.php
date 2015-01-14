@@ -80,27 +80,27 @@ final class App
      */
     public function run()
     {
-        $request = new Request($_GET + $_POST);
+        try {
 
-        $cid = $request->get('cid', 0);
+            $request = new Request($_GET + $_POST);
 
-        $name = $this->route($_GET);
+            $cid = $request->get('cid', 0);
 
-        if ($name) {
-            $connection = $this->connections->getByCid($cid);
+            $name = $this->route($_GET);
 
-            if (empty($connection)) {
-                throw new SessionNotFoundException();
+            if ($name) {
+                $connection = $this->connections->getByCid($cid);
+
+                if (empty($connection)) {
+                    throw new SessionNotFoundException();
+                }
+
+                $name = 'Juxta\\Command\\' . $name;
+
+                $command = new $name(Db::factory($connection));
             }
 
-            $name = 'Juxta\\Command\\' . $name;
-
-            $command = new $name(Db::factory($connection));
-        }
-
-        $response = null;
-
-        try {
+            $response = null;
 
             if (isset($command)) {
 
