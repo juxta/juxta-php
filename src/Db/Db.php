@@ -15,14 +15,24 @@ class Db
      */
     const DEFAULT_HOST = 'localhost';
     const DEFAULT_PORT = 3306;
+    const DEFAULT_USER = '';
+    const DEFAULT_PASSWORD = '';
     const DEFAULT_CHARSET = 'utf8';
 
     /**
-     * @const Fetch style
+     *
      */
-    const FETCH_ASSOC = 1;
-    const FETCH_NUM = 2;
-    const FETCH_BOTH = 3;
+    const FETCH_ROW = 1;
+    const FETCH_ALL = 2;
+    const FETCH_NUM = 4;
+    const FETCH_ASSOC = 8;
+    const FETCH_BOTH = 12;
+    const FETCH_ROW_NUM = 5;
+    const FETCH_ROW_ASSOC = 9;
+    const FETCH_ROW_BOTH = 13;
+    const FETCH_ALL_NUM = 6;
+    const FETCH_ALL_ASSOC = 10;
+    const FETCH_ALL_BOTH = 14;
 
     /**
      * @var array
@@ -103,11 +113,11 @@ class Db
         }
 
         if (empty($connection['user'])) {
-            unset($connection['user']);
+            $connection['user'] = Db::DEFAULT_USER;
         }
 
         if (empty($connection['password'])) {
-            unset($connection['password']);
+            $connection['password'] = Db::DEFAULT_PASSWORD;
         }
 
         return $connection;

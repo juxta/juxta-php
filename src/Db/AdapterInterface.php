@@ -14,22 +14,12 @@ interface AdapterInterface
     public function query($sql);
 
     /**
-     * Run a query and fetch a result row
-     *
-     * @param string $sql
-     * @param array $columns
+     * Run a query and fetch one or all result rows
+     * @param $sql
      * @param int $type
-     * @return array
+     * @param array $columns
+     * @return mixed
      */
-    public function fetchRow($sql, $columns = null, $type = Db::FETCH_NUM);
+    public function fetch($sql, $type = Db::FETCH_ALL_NUM, array $columns = null);
 
-    /**
-     * Run a query and fetch all result rows
-     *
-     * @param string $sql
-     * @param array $columns
-     * @param int $type
-     * @return array
-     */
-    public function fetchAll($sql, $columns = null, $type = Db::FETCH_NUM);
 }

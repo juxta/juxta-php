@@ -2,14 +2,16 @@
 
 namespace Juxta\Command;
 
+use Juxta\Db\Db;
 use Juxta\Request;
 
 class ShowIndexes extends CommandAbstract
 {
     public function run(Request $request)
     {
-        $columns = $this->db->fetchAll(
+        $columns = $this->db->fetch(
             "SHOW INDEXES FROM {$request['from']}.{$request['table']}",
+            Db::FETCH_ALL_NUM,
             ['Key_name', 'Index_type', 'Non_unique', 'Column_name']
         );
 

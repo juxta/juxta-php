@@ -2,13 +2,17 @@
 
 namespace Juxta\Command;
 
+use Juxta\Db\Db;
 use Juxta\Request;
 
 class ShowTable extends CommandAbstract
 {
     public function run(Request $request)
     {
-        $table = $this->db->fetchAll("SHOW COLUMNS FROM `{$request['table']}` FROM `{$request['from']}`");
+        $table = $this->db->fetch(
+            "SHOW COLUMNS FROM `{$request['table']}` FROM `{$request['from']}`",
+            Db::FETCH_ALL_NUM
+        );
 
         if (!$table || !is_array($table)) {
             return;

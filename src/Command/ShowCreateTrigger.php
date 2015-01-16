@@ -12,7 +12,7 @@ class ShowCreateTrigger extends CommandAbstract
         $name = $request['trigger'];
         $database = $request['from'];
 
-        $trigger = $this->db->fetchRow("SHOW CREATE TRIGGER `{$database}`.`{$name}`", Db::FETCH_ASSOC);
+        $trigger = $this->db->fetch("SHOW CREATE TRIGGER `{$database}`.`{$name}`", Db::FETCH_ROW_ASSOC);
 
         return ['trigger' => $name, 'from' => $database, 'statement' => $trigger['SQL Original Statement']];
     }

@@ -197,7 +197,7 @@ final class App
             return "{$exception->getCode()} {$exception->getMessage()}";
         }
 
-        $version = $db->fetchAll("SHOW VARIABLES LIKE '%version%'", Db::FETCH_ASSOC);
+        $version = $db->fetch("SHOW VARIABLES LIKE '%version%'", Db::FETCH_ALL_ASSOC);
 
         foreach ($version as $row) {
             if (in_array($row['Variable_name'], array('version', 'version_comment'))) {

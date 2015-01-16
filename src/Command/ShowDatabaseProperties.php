@@ -18,7 +18,7 @@ class ShowDatabaseProperties extends CommandAbstract
             . "FROM `information_schema`.`SCHEMATA` "
             . "WHERE `SCHEMA_NAME` = '{$database}'";
 
-        $charset = $this->db->fetchAll($sql1, null, Db::FETCH_BOTH);
+        $charset = $this->db->fetch($sql1, Db::FETCH_ALL_BOTH);
 
         if ($charset) {
             $properties['charset'] = $charset[0]['name'];
@@ -31,7 +31,7 @@ class ShowDatabaseProperties extends CommandAbstract
             . "FROM `INFORMATION_SCHEMA`.`TABLES` "
             . "WHERE `TABLE_SCHEMA` = '{$database}' AND `TABLE_TYPE` <> 'VIEW'";
 
-        $statistics = $this->db->fetchAll($sql2, null, Db::FETCH_BOTH);
+        $statistics = $this->db->fetch($sql2, Db::FETCH_ALL_BOTH);
 
         if ($statistics) {
             $properties['tables'] = $statistics[0]['tables'];

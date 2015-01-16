@@ -12,7 +12,7 @@ class ShowFunctionProperties extends CommandAbstract
         $sql = "SELECT * FROM `INFORMATION_SCHEMA`.`ROUTINES` WHERE `ROUTINE_SCHEMA` = '{$request['from']}' "
             . " AND `ROUTINE_NAME` = '{$request['function']}' AND ROUTINE_TYPE = 'FUNCTION'";
 
-        $properties = $this->db->fetchRow($sql, Db::FETCH_ASSOC);
+        $properties = $this->db->fetch($sql, Db::FETCH_ROW_ASSOC);
 
         if (!empty($properties)) {
             $properties = array_change_key_case($properties, CASE_LOWER);

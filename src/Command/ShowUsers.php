@@ -9,7 +9,7 @@ class ShowUsers extends CommandAbstract
 {
     public function run(Request $request)
     {
-        $rows = $this->db->fetchAll("SELECT * FROM mysql.user", Db::FETCH_ASSOC);
+        $rows = $this->db->fetch("SELECT * FROM mysql.user", Db::FETCH_ALL_ASSOC);
 
         return array_map([$this, 'prepareRow'], (array)$rows);
     }

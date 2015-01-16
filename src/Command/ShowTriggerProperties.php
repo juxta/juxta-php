@@ -12,7 +12,7 @@ class ShowTriggerProperties extends CommandAbstract
         $sql = "SELECT * FROM `INFORMATION_SCHEMA`.`TRIGGERS` WHERE `TRIGGER_SCHEMA` = '{$request['from']}' "
             . " AND `TRIGGER_NAME` = '{$request['trigger']}'";
 
-        $properties = $this->db->fetchRow($sql, Db::FETCH_ASSOC);
+        $properties = $this->db->fetch($sql, Db::FETCH_ROW_ASSOC);
 
         if (!empty($properties)) {
             $properties = array_change_key_case($properties, CASE_LOWER);

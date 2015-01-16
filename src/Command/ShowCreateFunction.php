@@ -12,7 +12,7 @@ class ShowCreateFunction extends CommandAbstract
         $name = $request['function'];
         $database = $request['from'];
 
-        $function = $this->db->fetchRow("SHOW CREATE FUNCTION `{$database}`.`{$name}`", Db::FETCH_ASSOC);
+        $function = $this->db->fetch("SHOW CREATE FUNCTION `{$database}`.`{$name}`", Db::FETCH_ROW_ASSOC);
 
         return ['function' => $name, 'from' => $database, 'statement' => $function['Create Function']];
     }

@@ -12,7 +12,7 @@ class ShowProcedureProperties extends CommandAbstract
         $sql = "SELECT * FROM `INFORMATION_SCHEMA`.`ROUTINES` WHERE `ROUTINE_SCHEMA` = '{$request['from']}' "
             . " AND `ROUTINE_NAME` = '{$request['procedure']}' AND ROUTINE_TYPE = 'PROCEDURE'";
 
-        $properties = $this->db->fetchRow($sql, Db::FETCH_ASSOC);
+        $properties = $this->db->fetch($sql, Db::FETCH_ROW_ASSOC);
 
         if (!empty($properties)) {
             $properties = array_change_key_case($properties, CASE_LOWER);

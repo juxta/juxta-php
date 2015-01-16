@@ -25,32 +25,46 @@ class AdapterMysqli implements AdapterInterface
 
         $arguments = func_get_args();
 
-        if (empty($arguments)) {
+        if (empty($arguments) || !($arguments[0] instanceof \mysqli || is_array($arguments[0]))) {
             throw new ConnectErrorException('Invalid argument');
         }
 
         if ($arguments[0] instanceof \mysqli) {
             $this->connection = $arguments[0];
-
-        } elseif (is_array($arguments[0])) {
-            $params = Db::extract($arguments[0]);
+            return;
         }
 
-        if (!empty($params)) {
-            try {
-                $this->connection = @new \mysqli(
-                    $params['host'],
-                    $params['user'],
-                    $params['password'],
-                    '',
-                    $params['port']
-                );
+        $params = Db::extract($arguments[0]);
 
-                $this->connection->set_charset($params['charset']);
+        mysqli_report(MYSQLI_REPORT_STRICT);
 
-            } catch (\mysqli_sql_exception $exception) {
-                throw new ConnectErrorException($exception->getMessage(), $exception->getCode());
-            }
+        try {
+
+            $this->connection = new \mysqli(
+                $params['host'],
+                $params['user'],
+                $params['password'],
+                '',
+                $params['port']
+            );
+
+            $this->connection->set_charset($params['charset']);
+
+        } catch (\mysqli_sql_exception $exception) {
+            throw new ConnectErrorException($exception->getMessage(), $exception->getCode());
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function query($sql)
+    {
+        try {
+            return $this->connection->query($sql);
+
+        } catch (\mysqli_sql_exception $exception) {
+            throw new QueryErrorException($exception->getMessage(), $exception->getCode());
         }
     }
 
@@ -71,13 +85,16 @@ class AdapterMysqli implements AdapterInterface
         $values = [];
 
         foreach ($columns as $column) {
+
             if (!array_key_exists($column, $row)) {
                 continue;
             }
-            if ($type === Db::FETCH_NUM || $type === Db::FETCH_BOTH) {
+
+            if ($type & Db::FETCH_NUM) {
                 $values[] = $row[$column];
             }
-            if ($type === Db::FETCH_ASSOC || $type === Db::FETCH_BOTH) {
+
+            if ($type & Db::FETCH_ASSOC) {
                 $values[$column] = $row[$column];
             }
         }
@@ -86,39 +103,33 @@ class AdapterMysqli implements AdapterInterface
     }
 
     /**
-     * Fetch one or all result rows as an associative, a numeric array, or both
-     *
-     * @param \mysqli_result $result
-     * @param array $columns
-     * @param int $type
-     * @param bool $fetchRow
-     * @return array
+     * {@inheritdoc}
      */
-    protected static function fetch(\mysqli_result $result, $columns = null, $type = Db::FETCH_NUM, $fetchRow = false)
+    public function fetch($sql, $type = Db::FETCH_ALL_NUM, array $columns = null)
     {
-        if (is_bool($type)) {
-            $fetchRow = $type;
-            $type = Db::FETCH_NUM;
+
+        $result = $this->query($sql);
+
+        if (is_bool($result)) {
+            return [];
         }
 
-        if (is_numeric($columns)) {
-            $type = $columns;
-            $columns = [];
-        }
+        $resultType = MYSQLI_NUM;
 
-        $map = [
-            Db::FETCH_ASSOC => MYSQLI_ASSOC,
-            Db::FETCH_NUM => MYSQLI_NUM,
-            Db::FETCH_BOTH => MYSQLI_BOTH,
-        ];
+        if ($type & Db::FETCH_ASSOC) {
+            $resultType = MYSQLI_ASSOC;
+
+        } else if (!empty($columns)) {
+            $resultType = MYSQLI_BOTH;
+        }
 
         $rows = [];
 
-        while ($row = $result->fetch_array(empty($columns) ? $map[$type] : MYSQLI_ASSOC)) {
+        while ($row = $result->fetch_array($resultType)) {
 
             $row = self::prepare($row, $columns, $type);
 
-            if ($fetchRow) {
+            if ($type & Db::FETCH_ROW) {
                 return $row;
             }
 
@@ -126,46 +137,5 @@ class AdapterMysqli implements AdapterInterface
         }
 
         return $rows;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function query($sql)
-    {
-        try {
-            return $this->connection->query($sql);
-
-        } catch (\mysqli_sql_exception $exception) {
-            throw new QueryErrorException($exception->getMessage(), $exception->getCode());
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function fetchRow($sql, $columns = null, $type = Db::FETCH_NUM)
-    {
-        $result = $this->query($sql);
-
-        if (is_bool($result)) {
-            return [];
-        }
-
-        return self::fetch($result, $columns, $type, true);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function fetchAll($sql, $columns = null, $type = Db::FETCH_NUM)
-    {
-        $result = $this->query($sql);
-
-        if (is_bool($result)) {
-            return [];
-        }
-
-        return self::fetch($result, $columns, $type, false);
     }
 }

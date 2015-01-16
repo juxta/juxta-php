@@ -12,7 +12,7 @@ class ShowViewProperties extends CommandAbstract
         $sql = "SELECT * FROM `INFORMATION_SCHEMA`.`VIEWS` WHERE `TABLE_SCHEMA` = '{$request['from']}' "
             . " AND `TABLE_NAME` = '{$request['view']}'";
 
-        $properties = $this->db->fetchRow($sql, Db::FETCH_ASSOC);
+        $properties = $this->db->fetch($sql, Db::FETCH_ROW_ASSOC);
 
         if (!empty($properties)) {
             $properties = array_change_key_case($properties, CASE_LOWER);

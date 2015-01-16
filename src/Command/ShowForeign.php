@@ -2,6 +2,7 @@
 
 namespace Juxta\Command;
 
+use Juxta\Db\Db;
 use Juxta\Request;
 
 class ShowForeign extends CommandAbstract
@@ -24,6 +25,6 @@ WHERE
   AND kcu.CONSTRAINT_NAME <> 'PRIMARY'
 SQL;
 
-        return $this->db->fetchAll($sql);
+        return $this->db->fetch($sql, Db::FETCH_ALL_NUM);
     }
 }

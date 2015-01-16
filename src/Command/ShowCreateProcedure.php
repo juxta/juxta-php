@@ -12,7 +12,7 @@ class ShowCreateProcedure extends CommandAbstract
         $name = $request['procedure'];
         $database = $request['from'];
 
-        $procedure = $this->db->fetchRow("SHOW CREATE PROCEDURE `{$database}`.`{$name}`", Db::FETCH_ASSOC);
+        $procedure = $this->db->fetch("SHOW CREATE PROCEDURE `{$database}`.`{$name}`", Db::FETCH_ROW_ASSOC);
 
         return ['procedure' => $name, 'from' => $database, 'statement' => $procedure['Create Procedure']];
     }

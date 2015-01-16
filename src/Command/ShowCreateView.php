@@ -12,8 +12,8 @@ class ShowCreateView extends CommandAbstract
         $view = $request['view'];
         $database = $request['from'];
 
-        $view = $this->db->fetchAll("SHOW CREATE VIEW `{$database}`.`{$view}`", true, Db::FETCH_ASSOC);
+        $view = $this->db->fetch("SHOW CREATE VIEW `{$database}`.`{$view}`", Db::FETCH_ROW_ASSOC);
 
-        return ['view' => $view, 'from' => $database, 'statement' => $view[0]['Create View']];
+        return ['view' => $view, 'from' => $database, 'statement' => $view['Create View']];
     }
 }
