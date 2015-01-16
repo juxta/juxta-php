@@ -35,6 +35,7 @@ final class App
             'tables' => 'ShowTables',
             'table' => 'ShowTable',
             'indexes' => 'ShowIndexes',
+            'foreign' => 'ShowForeign',
             'views' => 'ShowViews',
             'view' => 'ShowCreateView',
             'routines' => 'ShowRoutines',
